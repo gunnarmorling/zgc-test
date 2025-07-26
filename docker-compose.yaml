@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    user: postgres
+    restart: always
+    healthcheck:
+      test: 'pg_isready -U user --dbname=inventorydb'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_DB: inventorydb
+      POSTGRES_PASSWORD: top-secret
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256\nhost replication all 0.0.0.0/0 md5"
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    command: |
+      postgres
+      -c wal_level=logical
+      -c max_wal_senders=10
+      -c max_replication_slots=10
+      -c max_slot_wal_keep_size=50GB
+    volumes:
+      - ./postgres/00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
