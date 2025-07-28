@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import io.quarkus.runtime.StartupEvent;
@@ -18,6 +18,9 @@ import jakarta.ws.rs.core.MediaType;
 
 @Path("/purchase_orders")
 public class PurchaseOrderResource {
+
+	private static final String LETTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	private static final int RANDOM_COUNT = Integer.valueOf(Optional.ofNullable(System.getenv("RANDOM_COUNT")).orElse("1000"));
 
     private static final int PURCHASE_ORDER_COUNT = 100;
 
@@ -33,12 +36,12 @@ public class PurchaseOrderResource {
     @Path("/random")
     public PurchaseOrder getRandomPurchaseOrder() {
 		PurchaseOrder po = PurchaseOrder.findById(ThreadLocalRandom.current().nextInt(PURCHASE_ORDER_COUNT - 1) + 1);
-		List<UUID> uuids = new ArrayList<UUID>();
+		List<String> randoms = new ArrayList<String>();
 		for(int i = 0; i < 1000; i++) {
-			uuids.add(UUID.randomUUID());
+			randoms.add(randomString(RANDOM_COUNT));
 		}
 
-		po.uuid = uuids.get(ThreadLocalRandom.current().nextInt(uuids.size()));
+		po.random = randoms.get(ThreadLocalRandom.current().nextInt(randoms.size()));
         return po;
     }
 
@@ -78,7 +81,7 @@ public class PurchaseOrderResource {
 
 	}
 
-	Product persistProduct(String name, String description) {
+	private Product persistProduct(String name, String description) {
     	Product product = new Product();
     	product.name = name;
     	product.description = description;
@@ -86,4 +89,12 @@ public class PurchaseOrderResource {
 
     	return product;
     }
+
+	private static String randomString(int len){
+	       StringBuilder sb = new StringBuilder(len);
+	       for(int i = 0; i < len; i++) {
+			sb.append(LETTERS.charAt(ThreadLocalRandom.current().nextInt(LETTERS.length())));
+		}
+	       return sb.toString();
+	    }
 }

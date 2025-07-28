@@ -1,7 +1,6 @@
 package org.acme;
 
 import java.util.List;
-import java.util.UUID;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CascadeType;
@@ -34,5 +33,5 @@ public class PurchaseOrder extends PanacheEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "purchaseOrder")
     public List<OrderLine> orderLines;
     public String customer;
-    public UUID uuid;
+    public String random;
 }

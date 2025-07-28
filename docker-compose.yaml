@@ -24,3 +24,7 @@ services:
       -c max_slot_wal_keep_size=50GB
     volumes:
       - ./postgres/00_init.sql:/docker-entrypoint-initdb.d/00_init.sql
+    deploy:
+      resources:
+        limits:
+          cpus: 4.0
