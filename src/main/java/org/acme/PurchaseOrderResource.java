@@ -31,12 +31,18 @@ public class PurchaseOrderResource {
         return PurchaseOrder.findById(id);
     }
 
+
 	@GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/random")
     public PurchaseOrder getRandomPurchaseOrder() {
-		PurchaseOrder po = PurchaseOrder.findById(ThreadLocalRandom.current().nextInt(PURCHASE_ORDER_COUNT - 1) + 1);
+		return PurchaseOrder.findById(ThreadLocalRandom.current().nextInt(PURCHASE_ORDER_COUNT - 1) + 1);
+    }
 
+	@GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/allocationheavy")
+    public String allocationHeavy() {
 		List<List<Long>> randoms = new ArrayList<>(OUTER_SIZE);
 		for(int i = 0; i < OUTER_SIZE; i++) {
 			List<Long> l = new ArrayList<>(INNER_SIZE);
@@ -46,8 +52,7 @@ public class PurchaseOrderResource {
 			randoms.add(l);
 		}
 
-		po.random = randoms.get(ThreadLocalRandom.current().nextInt(randoms.size())).toString();
-        return po;
+		return randoms.get(ThreadLocalRandom.current().nextInt(OUTER_SIZE)).get(ThreadLocalRandom.current().nextInt(INNER_SIZE)).toString();
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import java.util.List;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 
 
@@ -30,7 +31,7 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class PurchaseOrder extends PanacheEntity {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "purchaseOrder")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
     public List<OrderLine> orderLines;
     public String customer;
     public String random;
