@@ -19,7 +19,7 @@ import jakarta.ws.rs.core.MediaType;
 @Path("/purchase_orders")
 public class PurchaseOrderResource {
 
-	private static final int OUTER_SIZE = Integer.valueOf(Optional.ofNullable(System.getenv("RANDOM_COUNT")).orElse("100"));
+	private static final int OUTER_SIZE = Integer.valueOf(Optional.ofNullable(System.getenv("RANDOM_COUNT")).orElse("50"));
 	private static final int INNER_SIZE = 1000;
 
     private static final int PURCHASE_ORDER_COUNT = 100;
